@@ -13,6 +13,8 @@
         <module>api-gateway</module>
         <module>user-service</module>
         <module>support-module</module>
+        <module>email-service</module>
+        <module>profile-service</module>
     </modules>
 
     <properties>
