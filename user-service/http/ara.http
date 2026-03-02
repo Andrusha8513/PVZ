@@ -5,7 +5,7 @@ POST http://localhost:8765/auth/sign-in
 Content-Type: application/json
 
 {
-  "email": "4057163@mail.ru",
+  "email": "9197195@mail.ru",
   "password": "11111111"
 }
 
@@ -50,12 +50,12 @@ Content-Type: application/json
   "name": "ARa",
   "secondName": "qwe",
   "password": "11111111",
-  "email": "4057163@mail.ru",
+  "email": "9197195@mail.ru",
   "birthDay": "1995-05-15"
 }
 
 ### 2.5 Подтверждение регистрации по коду
-POST http://localhost:8765/api/users/confirm-registration?code=EAE3C6
+POST http://localhost:8765/api/users/confirm-registration?code=A28C95
 
 ### 2.6 Повторная отправка кода подтверждения
 POST http://localhost:8765/api/users/resend-confirm-registration?email=djkslsdkmds@mail.ru
@@ -134,118 +134,62 @@ Content-Type: image/jpeg
 DELETE http://localhost:8765/profile/api/profile/deleteAvatar/1
 Authorization: Bearer {{token}}
 
-
-###
+### 3.4 Получить изображение (пример)
 GET http://localhost:8765/profile/image/11
 Authorization: Bearer {{token}}
 
+### 4. Сотрудники (EmployeeController)
 
-### 4. Посты (PostController)
+### 4.1 Создать сотрудника (требуется авторизация)
+POST http://localhost:8765/profile/api/employee/createEmployee/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
 
-### 4.1 Получить все посты
-GET http://localhost:8765/posts/api/post
+{
+  "name": "Ара",
+  "secondName": "Калях",
+  "surName": "Бибизянов",
+  "phone": "+7189197196",
+  "fixedRatePerHour": 5000.00
+}
+
+### 4.2 Удалить сотрудника по ID (требуется авторизация)
+DELETE http://localhost:8765/profile/api/employee/deleteEmployee/4
 Authorization: Bearer {{token}}
 
-### 4.2 Получить посты сообщества по ID
-GET http://localhost:8765/posts/api/post/community/1
+### 5. Пункты выдачи (PvzController)
+
+### 5.1 Создать ПВЗ (требуется авторизация)
+POST http://localhost:8765/profile/api/pvz/createPvz
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "ПВЗ на Ленина",
+  "address": "ул. Плодовая 19"
+}
+
+### 5.2 Обновить название ПВЗ (требуется авторизация)
+PUT http://localhost:8765/profile/api/pvz/updateNamePvz/1?newName=ПВЗ на Чехова
 Authorization: Bearer {{token}}
 
-### 4.3 Получить посты пользователя по ID (внимание: нестандартный путь, возможно ошибка в контроллере)
-GET http://localhost:8765/posts/api/post/api/post/2
+### 5.3 Обновить адрес ПВЗ (требуется авторизация)
+PUT http://localhost:8765/profile/api/pvz/updateAddressPvz/1?newName=ул. Гагарина, д. 5
 Authorization: Bearer {{token}}
 
-### 4.4 Получить пост по ID
-GET http://localhost:8765/posts/api/post/1
+### 5.4 Удалить ПВЗ по ID (требуется авторизация)
+DELETE http://localhost:8765/profile/api/pvz/deletePvz/1
 Authorization: Bearer {{token}}
 
-### 4.5 Создать новый пост (с файлами)
-POST http://localhost:8765/posts/api/post/createpost
+### 6. Смены (ShiftController)
+
+### 6.1 Создать смену (требуется авторизация)
+POST http://localhost:8765/profile/api/shift/createShift
 Authorization: Bearer {{token}}
-Content-Type: multipart/form-data; boundary=WebAppBoundary
+Content-Type: application/json
 
---WebAppBoundary
-Content-Disposition: form-data; name="description"
-
-Мой первый пост
---WebAppBoundary
-Content-Disposition: form-data; name="communityId"
-
-5
---WebAppBoundary
-Content-Disposition: form-data; name="file1"; filename="photo1.jpg"
-Content-Type: image/jpeg
-
-< ./test-photo1.jpg
---WebAppBoundary
-Content-Disposition: form-data; name="file2"; filename="photo2.jpg"
-Content-Type: image/jpeg
-
-< ./test-photo2.jpg
---WebAppBoundary
-
-
-### 4.6 Удалить пост по ID
-DELETE http://localhost:8765/posts/api/post/1
-Authorization: Bearer {{token}}
-
-### 4.7 Обновить пост по ID
-POST http://localhost:8765/posts/api/post/update/34
-Authorization: Bearer {{token}}
-Content-Type: multipart/form-data; boundary=WebAppBoundary
-
---WebAppBoundary
-Content-Disposition: form-data; name="description"
-
-Обновлённое описание поста
---WebAppBoundary
-
-
-### 5. Комментарии (CommentController)
-
-### 5.1 Получить все комментарии к посту
-GET http://localhost:8765/posts/api/post/comment/1
-Authorization: Bearer {{token}}
-
-### 5.2 Добавить комментарий к посту
-POST http://localhost:8765/posts/api/post/comment/create/24?text=Отличный пост!
-Authorization: Bearer {{token}}
-
-### 5.3 Удалить комментарий по ID
-DELETE http://localhost:8765/posts/api/post/comment/1
-Authorization: Bearer {{token}}
-
-### 5.4 Обновить текст комментария
-POST http://localhost:8765/posts/api/post/comment/update/1?text=Обновлённый комментарий
-Authorization: Bearer {{token}}
-
-### 6. Ответы на комментарии (SubCommentController)
-
-### 6.1 Добавить ответ на комментарий
-POST http://localhost:8765/posts/api/subcomment/add/1?text=Согласен!
-Authorization: Bearer {{token}}
-
-### 6.2 Удалить ответ по ID
-DELETE http://localhost:8765/posts/api/subcomment/delete/1
-Authorization: Bearer {{token}}
-
-### 6.3 Обновить текст ответа
-POST http://localhost:8765/post/api/subcomment/update/1?text=Обновлённый ответ
-Authorization: Bearer {{token}}
-
-### Создание поста без файлов
-POST http://localhost:8765/posts/api/post/createpost
-Authorization: Bearer {{token}}
-Content-Type: multipart/form-data; boundary=WebAppBoundary
-
---WebAppBoundary
-Content-Disposition: form-data; name="description"
-
-Хуй
---WebAppBoundary--
-###
-GET http://localhost:8765/profile/image/1
-Authorization: Bearer {{token}}
-
-###
-GET http://localhost:8765/profile/image-post/50
-Authorization: Bearer {{token}}
+{
+  "employeeId": 3,
+  "scheduledStartTime": "2026-03-03T09:00:00",
+  "scheduledEndTime": "2026-03-03T18:00:00"
+}

@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -25,5 +28,9 @@ public class Profile {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "avatar_id")
     private Image avatar;
+
+
+    @OneToMany(mappedBy = "owner" , fetch = FetchType.LAZY , orphanRemoval = true)
+    private List<Pvz> pvzs = new ArrayList<>();
 
 }
