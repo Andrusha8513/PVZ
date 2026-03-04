@@ -28,7 +28,6 @@ public class PvzService {
         }
         Profile owner = profileRepository.findById(ownerId)
                 .orElseThrow(() -> new RuntimeException("Профиль с id " + ownerId + " не найден"));
-
       Pvz pvz = pvzMapper.toEntity(createPvzRequestDto);
       pvz.setOwner(owner);
       pvzRepository.save(pvz);

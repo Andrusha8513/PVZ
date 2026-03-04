@@ -1,13 +1,20 @@
 package com.example.profile_service.service;
 
 import com.example.profile_service.dto.PrivetUserProfileDto;
+import com.example.profile_service.dto.ProfileDashboardResponseDto;
+import com.example.profile_service.dto.PvzDetailsDto;
+import com.example.profile_service.dto.PvzShortDto;
 import com.example.profile_service.entity.Profile;
 import com.example.profile_service.entity.Image;
+import com.example.profile_service.entity.Pvz;
+import com.example.profile_service.mapper.ProfileDashboardMapper;
+import com.example.profile_service.mapper.PvzMapper;
 import com.example.profile_service.redis.ProfileRedisRepository;
 import com.example.profile_service.repository.ImageRepository;
 import com.example.profile_service.mapper.ImageMapper;
 import com.example.profile_service.mapper.ProfileMapper;
 import com.example.profile_service.repository.ProfileRepository;
+import com.example.profile_service.repository.PvzRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -18,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,9 +36,12 @@ public class ProfileService {
     private final ImageMapper imageMapper;
     private final ProfileMapper profileMapper;
     private final ProfileRedisRepository profileRedisRepository;
+    private final PvzRepository pvzRepository;
+    private final PvzMapper pvzMapper;
+    private final ProfileDashboardMapper profileDashboardMapper;
 
 
-    @Transactional
+    @Transactional(readOnly = true)
     public PrivetUserProfileDto getProfile(Long id) {
         Optional<PrivetUserProfileDto> cash = profileRedisRepository.getProfileSummery(id);
         if (cash.isPresent()) {
@@ -44,10 +55,25 @@ public class ProfileService {
     }
 
     @Transactional(readOnly = true)
-    public PrivetUserProfileDto findProfilee(String email) {
+    public List<PvzShortDto> getMyPvzShort(Long id){
+         List<Pvz> pvzs = pvzRepository.findByOwnerId(id);
+            return pvzs.stream()
+                    .map(pvzMapper:: toShotDto)
+                    .toList();
+        }
+
+        @Transactional(readOnly = true)
+        public PvzDetailsDto getPvzDetailsDto(Long id){
+            Pvz pvz =  pvzRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Пвз с таким  id= "+ id + "не найдено"));
+            return pvzMapper.toDetailsDto(pvz);
+        }
+
+    @Transactional(readOnly = true)
+    public ProfileDashboardResponseDto findProfilee(String email) {
         Profile profile = profileRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Профиля с такой почтой " + email + " не найдено!"));
-        return profileMapper.toDto(profile);
+        return profileDashboardMapper.toDto(profile);
     }
 
 

@@ -45,8 +45,8 @@ public class Users {
     @NotBlank(message = "Отчество не может быть пустой!")
     private String surName;
 
-//    @Size(max = 100 , message = "Почта не может быть длиннее 100 символов!")
-//    @NotBlank(message = "Почта не может быть пустой!")
+    @Size(max = 100 , message = "Почта не может быть длиннее 100 символов!")
+    @NotBlank(message = "Почта не может быть пустой!")
     private String pendingEmail;
 
 
@@ -60,26 +60,10 @@ public class Users {
     private boolean isAccountNonLocked = false;
     private String refreshToken;
 
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "users")
-//    private List<Image> photos  = new ArrayList<>();
 
     @ElementCollection(targetClass = Role.class , fetch = FetchType.EAGER)
     @CollectionTable(name = "users_role" , joinColumns = @JoinColumn(name = "users_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
-
-    public Users(Long id,
-                 String email,
-                 String password,
-                 String name,
-                 String secondName,
-                 String surName) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.secondName = secondName;
-        this.surName = surName;
-    }
 
 }

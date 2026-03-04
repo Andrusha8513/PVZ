@@ -5,7 +5,7 @@ POST http://localhost:8765/auth/sign-in
 Content-Type: application/json
 
 {
-  "email": "9197195@mail.ru",
+  "email": "4057163@mail.ru",
   "password": "11111111"
 }
 
@@ -50,12 +50,12 @@ Content-Type: application/json
   "name": "ARa",
   "secondName": "qwe",
   "password": "11111111",
-  "email": "9197195@mail.ru",
+  "email": "4057163@mail.ru",
   "birthDay": "1995-05-15"
 }
 
 ### 2.5 Подтверждение регистрации по коду
-POST http://localhost:8765/api/users/confirm-registration?code=A28C95
+POST http://localhost:8765/api/users/confirm-registration?code=4C1929
 
 ### 2.6 Повторная отправка кода подтверждения
 POST http://localhost:8765/api/users/resend-confirm-registration?email=djkslsdkmds@mail.ru
@@ -86,7 +86,7 @@ PUT http://localhost:8765/api/users/update-roles/1
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
-["ROLE_ADMIN"]
+["ROLE_OWNER_PVZ"]
 
 ### 2.14 Получить всех пользователей (только для ADMIN)
 GET http://localhost:8765/api/users/get-all-users
@@ -115,7 +115,7 @@ GET http://localhost:8765/profile/api/profile/myProfile/1
 Authorization: Bearer {{token}}
 
 ### 3.1.2 Найту профиль друга поп почте
-GET http://localhost:8765/profile/api/profile/findProfile?email=9197195@mail.ru
+GET http://localhost:8765/profile/api/profile/findProfile?email=4057163@mail.ru
 Authorization: Bearer {{token}}
 
 ### 3.2 Установить/заменить аватар (требуется авторизация)
@@ -138,6 +138,14 @@ Authorization: Bearer {{token}}
 GET http://localhost:8765/profile/image/11
 Authorization: Bearer {{token}}
 
+### 3.5 Получить список ПВЗ пользователя
+GET http://localhost:8765/profile/api/profile/getMyPvzShort/1
+Authorization: Bearer {{token}}
+
+### 3.5 Получить Детальные данные  ПВЗ пользователя
+GET http://localhost:8765/profile/api/profile/getPvzDetailsDto/1
+Authorization: Bearer {{token}}
+
 ### 4. Сотрудники (EmployeeController)
 
 ### 4.1 Создать сотрудника (требуется авторизация)
@@ -146,10 +154,10 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "Ара",
+  "name": "Настя",
   "secondName": "Калях",
   "surName": "Бибизянов",
-  "phone": "+7189197196",
+  "phone": "+7189197131",
   "fixedRatePerHour": 5000.00
 }
 
@@ -165,8 +173,8 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "ПВЗ на Ленина",
-  "address": "ул. Плодовая 19"
+  "name": "ПВЗ на QWDFB",
+  "address": "ул. QWEF 19"
 }
 
 ### 5.2 Обновить название ПВЗ (требуется авторизация)
@@ -193,3 +201,48 @@ Content-Type: application/json
   "scheduledStartTime": "2026-03-03T09:00:00",
   "scheduledEndTime": "2026-03-03T18:00:00"
 }
+### 6.2 Добавить бонус к смене (требуется авторизация)
+POST http://localhost:8765/profile/api/shift/addBonus/2
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+500.00
+
+### 6.3 Добавить штраф к смене (требуется авторизация)
+POST http://localhost:8765/profile/api/shift/addPenalty/2
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+200.00
+
+### 6.4 Добавить причину штрафа к смене (требуется авторизация)
+POST http://localhost:8765/profile/api/shift/addPenaltyReason/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+### 6.6 Установить фактическое время начала смены (через тело запроса)
+POST http://localhost:8765/profile/api/shift/actualStartTime/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+"2026-03-04T09:00:00"
+
+### 6.7 Установить фактическое время окончания смены (через тело запроса)
+POST http://localhost:8765/profile/api/shift/actualEndTime/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+"2026-03-04T18:00:00"
+
+### 6.8 Получить расчёт зарплаты за смену
+GET http://localhost:8765/profile/api/shift/calculatePay/2
+Authorization: Bearer {{token}}
+
+### 6.9 Обновить статус смены (PLANNED, COMPLETED, MISSED) через тело запроса
+PUT http://localhost:8765/profile/api/shift/updateStatus/2
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+"COMPLETED"
+
+

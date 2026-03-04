@@ -20,7 +20,7 @@ public class EmployeeService {
 
     @Transactional
     public void createEmployee(CreateEmployeeRequestDto createEmployeeRequestDto , Long pvzId){
-        if (employeeRepository.findByPhone(createEmployeeRequestDto.phone()).isPresent()) {
+        if (employeeRepository.existsByPhoneAndPvzId(createEmployeeRequestDto.phone(), pvzId)){
             throw new IllegalArgumentException("Сотрудник с таким телефоном уже существует");
         }
         Employee employee = employeeMapper.toEntity(createEmployeeRequestDto);
@@ -37,4 +37,18 @@ public class EmployeeService {
         employeeRepository.delete(employee);
     }
 
+
+    public void addDescription(Long id , String description){
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Сотрудник не найден"));
+        employee.setDescription(description);
+        employeeRepository.delete(employee);
+    }
+
+    public void addBank(Long id , String bank){
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Сотрудник не найден"));
+        employee.setBank(bank);
+        employeeRepository.delete(employee);
+    }
 }

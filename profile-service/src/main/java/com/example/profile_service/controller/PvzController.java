@@ -5,6 +5,7 @@ import com.example.profile_service.service.PvzService;
 import com.example.support_module.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ public class PvzController {
 
 
     @PostMapping("/createPvz")
+    @PreAuthorize("hasAuthority('ROLE_OWNER_PVZ') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> createPvz(@RequestBody CreatePvzRequestDto createPvzRequestDto,
                                        @AuthenticationPrincipal CustomUserDetails customUserDetails){
         try {
@@ -29,6 +31,7 @@ public class PvzController {
     }
 
     @PutMapping("/updateNamePvz/{id}")
+    @PreAuthorize("hasAuthority('ROLE_OWNER_PVZ') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> updateNamePvz(@PathVariable Long id , @RequestParam String newName){
             try {
                 pvzService.updateNamePvz(id , newName);
@@ -39,6 +42,7 @@ public class PvzController {
     }
 
     @PutMapping("/updateAddressPvz/{id}")
+    @PreAuthorize("hasAuthority('ROLE_OWNER_PVZ') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> updateAddressPvz(@PathVariable Long id , @RequestParam String newName){
         try {
             pvzService.updateAddressPvz(id , newName);
@@ -49,6 +53,7 @@ public class PvzController {
     }
 
     @DeleteMapping("/deletePvz/{id}")
+    @PreAuthorize("hasAuthority('ROLE_OWNER_PVZ') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deletePvz(@PathVariable Long id){
         try {
             pvzService.deletePvz(id);

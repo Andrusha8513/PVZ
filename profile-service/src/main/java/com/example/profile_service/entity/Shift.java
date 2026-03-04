@@ -37,4 +37,5 @@ public class Shift {
     private BigDecimal penalty;
     private String penaltyReason;
 
+    private BigDecimal employeeSalary;
 }

@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface EmployeeRepository extends JpaRepository<Employee , Long> {
     Optional<Employee> findByPhone(@Pattern(regexp = "^\\+?[1-9]\\d{1,14}$" , message = "Некорректный номер телефона!") String phone);
+
+    boolean existsByPhoneAndPvzId(String phone, Long pvzId);
 }
