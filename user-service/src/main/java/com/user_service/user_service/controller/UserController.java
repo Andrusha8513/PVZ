@@ -24,10 +24,10 @@ public class UserController {
 
     // Регистрация нового пользователя
     @PostMapping("/registration")
-    public ResponseEntity<UserRegistrationDTO> registrationUser(@RequestBody UserRegistrationDTO usersDto) {
+    public ResponseEntity<String> registrationUser(@RequestBody UserRegistrationDTO usersDto) {
         try {
             userService.createUsers(usersDto);
-            return ResponseEntity.ok(usersDto);
+            return ResponseEntity.ok().body("Пользователь зарегистрирован");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().build();
         }

@@ -16,6 +16,7 @@ import com.user_service.user_service.dto.mapping.UserMapper;
 import com.user_service.user_service.exeptionHandler.TooManyRequestsException;
 import com.user_service.user_service.kafka.KafkaProducer;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -51,6 +52,7 @@ public class UserService {
      * @param userDto DTO с данными для регистрации
      * @throws IllegalArgumentException если email уже существует или пароль короче 8 символов
      */
+    @Transactional
     public void createUsers(UserRegistrationDTO userDto) {
         if (userRepository.findByEmail((userDto.getEmail())).isPresent()) {
             throw new IllegalArgumentException("Пользователь с такой почтой уже существует");
@@ -69,13 +71,21 @@ public class UserService {
         users.setConfirmationCode(code);
         userRepository.save(users);
 
-        redisEmailService.saveEmailConfirmation(code);
+        try {
+            redisEmailService.saveEmailConfirmation(code);
+        } catch (Exception e) {
+            log.error("ОШИБКА ОТПРАВКИ В REDIS: ", e);
+        }
 
         EmailRequestDto emailRequestDto = new EmailRequestDto();
         emailRequestDto.setTo(users.getEmail());
         emailRequestDto.setCode(users.getConfirmationCode());
         emailRequestDto.setType(EmailRequestDto.EmailType.CONFIRMATION);
-        kafkaProducer.sendEmailToKafka(emailRequestDto);
+        try {
+            kafkaProducer.sendEmailToKafka(emailRequestDto);
+        } catch (Exception e) {
+            log.error("ОШИБКА ОТПРАВКИ В KAFKA: ", e);
+        }
 
 
         ProfileDto profileDto = new ProfileDto();

@@ -54,7 +54,6 @@ public class Users {
     private Boolean enable = false;
     private String emailChangeCode;
     private String passwordResetCode;
-    private Long avatarId;
     private LocalDateTime ttlEmailCode;
     private LocalDateTime passwordResetCodeExpiryDate;
     private boolean isAccountNonLocked = false;

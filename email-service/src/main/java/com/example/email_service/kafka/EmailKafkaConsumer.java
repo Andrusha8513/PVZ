@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class EmailKafkaConsumer {
     private final EmailService emailService;
     @KafkaListener(topics = "email",
-    groupId = "email-servise")
+    groupId = "email-service")
     public void consumerEmail(EmailRequestDto emailRequestDto){
         switch (emailRequestDto.getType()){
             case CONFIRMATION:

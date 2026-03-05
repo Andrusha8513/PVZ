@@ -49,13 +49,14 @@ Content-Type: application/json
 {
   "name": "ARa",
   "secondName": "qwe",
+  "surName": "Петров",
   "password": "11111111",
   "email": "4057163@mail.ru",
   "birthDay": "1995-05-15"
 }
 
 ### 2.5 Подтверждение регистрации по коду
-POST http://localhost:8765/api/users/confirm-registration?code=4C1929
+POST http://localhost:8765/api/users/confirm-registration?code=E71F6A
 
 ### 2.6 Повторная отправка кода подтверждения
 POST http://localhost:8765/api/users/resend-confirm-registration?email=djkslsdkmds@mail.ru
