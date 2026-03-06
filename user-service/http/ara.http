@@ -51,12 +51,12 @@ Content-Type: application/json
   "secondName": "qwe",
   "surName": "Петров",
   "password": "11111111",
-  "email": "4057163@mail.ru",
+  "email": "qeaqwsqqwqswsaqq@mail.ru",
   "birthDay": "1995-05-15"
 }
 
 ### 2.5 Подтверждение регистрации по коду
-POST http://localhost:8765/api/users/confirm-registration?code=E71F6A
+POST http://localhost:8765/api/users/confirm-registration?code=2E36C2
 
 ### 2.6 Повторная отправка кода подтверждения
 POST http://localhost:8765/api/users/resend-confirm-registration?email=djkslsdkmds@mail.ru
@@ -174,8 +174,8 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "ПВЗ на QWDFB",
-  "address": "ул. QWEF 19"
+  "name": "ПВЗ на QWERFD",
+  "address": "ул. DSDF 19"
 }
 
 ### 5.2 Обновить название ПВЗ (требуется авторизация)

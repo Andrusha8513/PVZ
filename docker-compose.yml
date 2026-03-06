@@ -125,6 +125,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - SPRING_DATA_REDIS_HOST=redis
+      - JAVA_OPTS=-Dnetworkaddress.cache.ttl=0 -Dnetworkaddress.cache.negative.ttl=0
 
   profile-service:
     build: ./profile-service
@@ -143,6 +145,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+      - SPRING_DATA_REDIS_HOST=redis
 
   email-service:
     build: ./email-service
