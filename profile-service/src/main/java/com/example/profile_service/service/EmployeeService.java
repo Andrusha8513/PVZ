@@ -1,6 +1,7 @@
 package com.example.profile_service.service;
 
 import com.example.profile_service.dto.CreateEmployeeRequestDto;
+import com.example.profile_service.dto.EmployeeShortDto;
 import com.example.profile_service.entity.Employee;
 import com.example.profile_service.entity.Pvz;
 import com.example.profile_service.mapper.EmployeeMapper;
@@ -9,6 +10,8 @@ import com.example.profile_service.repository.PvzRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -50,5 +53,16 @@ public class EmployeeService {
                 .orElseThrow(() -> new IllegalArgumentException("Сотрудник не найден"));
         employee.setBank(bank);
         employeeRepository.delete(employee);
+    }
+
+    @Transactional(readOnly = true)
+    public List<EmployeeShortDto> searchEmployees(Long pvzId, String name, String secondName, String surName) {
+        System.out.println("Поиск: pvzId=" + pvzId + ", name=" + name + ", secondName=" + secondName + ", surName=" + surName);
+        List<Employee> result = employeeRepository.searchEmployees(pvzId, name, secondName, surName);
+        System.out.println("Найдено сотрудников: " + result.size());
+       List <EmployeeShortDto> shortDtos =  result.stream()
+                .map(employeeMapper::toShortDto)
+                .toList();
+        return shortDtos;
     }
 }

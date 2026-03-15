@@ -1,11 +1,15 @@
 package com.example.profile_service.controller;
 
 import com.example.profile_service.dto.CreateEmployeeRequestDto;
+import com.example.profile_service.dto.EmployeeShortDto;
+import com.example.profile_service.entity.Employee;
 import com.example.profile_service.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -58,4 +62,18 @@ public class EmployeeController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/search/{pvzId}")
+    public ResponseEntity<?> searchEmployees(@PathVariable Long pvzId,
+                                             @RequestParam(required = false) String name,
+                                             @RequestParam(required = false) String secondName,
+                                             @RequestParam(required = false) String surName) {
+        try {
+            List<EmployeeShortDto> employees = employeeService.searchEmployees(pvzId, name, secondName, surName);
+            return ResponseEntity.ok(employees);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

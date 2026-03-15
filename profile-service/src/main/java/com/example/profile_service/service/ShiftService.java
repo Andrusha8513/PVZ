@@ -80,6 +80,16 @@ public class ShiftService {
         shiftRepository.save(shift);
     }
 
+    public void updateEmployeeForShift(Long shiftId , Long employeeId){
+        Shift shift = shiftRepository.findById(shiftId)
+                .orElseThrow(() -> new IllegalArgumentException("Смена не найдена"));
+
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new IllegalArgumentException("Сотрудник  не найден"));
+        shift.setEmployee(employee);
+        shiftRepository.save(shift);
+    }
+
     public void calculateShiftPay(Long shiftId) {
         Shift shift = shiftRepository.findById(shiftId)
                 .orElseThrow(() -> new IllegalArgumentException("Смена с id " + shiftId + " не найдена"));

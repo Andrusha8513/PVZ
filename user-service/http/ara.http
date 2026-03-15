@@ -5,7 +5,7 @@ POST http://localhost:8765/auth/sign-in
 Content-Type: application/json
 
 {
-  "email": "4057163@mail.ru",
+  "email": "qwertyu@mail.ru",
   "password": "11111111"
 }
 
@@ -51,7 +51,7 @@ Content-Type: application/json
   "secondName": "qwe",
   "surName": "Петров",
   "password": "11111111",
-  "email": "qeaqwsqqwqswsaqq@mail.ru",
+  "email": "qeaqwsqsswssdqswsaqq@mail.ru",
   "birthDay": "1995-05-15"
 }
 
@@ -83,7 +83,7 @@ POST http://localhost:8765/api/users/confirm-email-change/1?code=123456
 Authorization: Bearer {{token}}
 
 ### 2.13 Обновление ролей пользователя (требуется авторизация)
-PUT http://localhost:8765/api/users/update-roles/1
+PUT http://localhost:8765/api/users/update-roles/14
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -112,7 +112,7 @@ Authorization: Bearer {{token}}
 ### 3. Профиль (ProfileController)
 
 ### 3.1 Получить свой профиль (требуется авторизация)
-GET http://localhost:8765/profile/api/profile/myProfile/1
+GET http://localhost:8765/profile/api/profile/myProfile/14
 Authorization: Bearer {{token}}
 
 ### 3.1.2 Найту профиль друга поп почте
@@ -155,15 +155,19 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "Настя",
-  "secondName": "Калях",
-  "surName": "Бибизянов",
-  "phone": "+7189197131",
-  "fixedRatePerHour": 5000.00
+  "name": "Ара",
+  "secondName": "Техник",
+  "surName": "Петров",
+  "phone": "+7189197130",
+  "fixedRatePerHour": 500.00
 }
 
 ### 4.2 Удалить сотрудника по ID (требуется авторизация)
 DELETE http://localhost:8765/profile/api/employee/deleteEmployee/4
+Authorization: Bearer {{token}}
+
+### 4.3 Поиск сотрудников в ПВЗ (по имени, фамилии, отчеству)
+GET http://localhost:8765/profile/api/employee/search/1?name=Настя&secondName=&surName=
 Authorization: Bearer {{token}}
 
 ### 5. Пункты выдачи (PvzController)
@@ -174,8 +178,8 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "name": "ПВЗ на QWERFD",
-  "address": "ул. DSDF 19"
+  "name": "ПВЗ на test",
+  "address": "ул. test 19"
 }
 
 ### 5.2 Обновить название ПВЗ (требуется авторизация)
@@ -198,7 +202,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "employeeId": 3,
+  "employeeId": "1",
   "scheduledStartTime": "2026-03-03T09:00:00",
   "scheduledEndTime": "2026-03-03T18:00:00"
 }
@@ -246,4 +250,7 @@ Content-Type: application/json
 
 "COMPLETED"
 
+### 6.10 Обновить сотрудника для смены
+PUT http://localhost:8765/profile/api/shift/updateEmployeeForShift/1/2
+Authorization: Bearer {{token}}
 

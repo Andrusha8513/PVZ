@@ -4,6 +4,8 @@ import com.example.profile_service.dto.CreateShiftRequestDto;
 import com.example.profile_service.entity.ShiftStatus;
 import com.example.profile_service.service.ShiftService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 @RequestMapping("api/shift")
 public class ShiftController {
 
+    private static final Log log = LogFactory.getLog(ShiftController.class);
     private final ShiftService shiftService;
 
     @PostMapping("/createShift")
@@ -110,6 +113,18 @@ public class ShiftController {
             shiftService.calculateShiftPay(id);
             return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/updateEmployeeForShift/{shiftId}/{employeeId}")
+    public ResponseEntity<?> updateEmployeeForShift(@PathVariable Long shiftId ,
+                                                    @PathVariable Long employeeId){
+        try {
+            shiftService.updateEmployeeForShift(shiftId , employeeId);
+            return ResponseEntity.ok("сменили сотрудника на смене ");
+        }catch (RuntimeException e){
+            log.info("Критическая ошибка " + e);
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

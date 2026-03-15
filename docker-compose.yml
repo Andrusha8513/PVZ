@@ -8,6 +8,7 @@ volumes:
   postgres_data:
   redis_data:
   pgadmin_data:
+  kafka_data:
 
 services:
   kafka-ui:
@@ -59,6 +60,8 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+    volumes:
+      - kafka_data:/var/lib/kafka/data
     networks:
       - backend
     healthcheck:
@@ -96,7 +99,7 @@ services:
       - backend
 
   eureka-server:
-    build: ./eureka-server
+    image: andrusha0502/eureka-server:v1.2
     container_name: eureka-server
     ports:
       - "8761:8761"
@@ -109,7 +112,7 @@ services:
       retries: 10
 
   user-service:
-    build: ./user-service
+    image: andrusha0502/user-service:v1.2
     container_name: user-service
     depends_on:
       postgres:
@@ -129,7 +132,7 @@ services:
       - JAVA_OPTS=-Dnetworkaddress.cache.ttl=0 -Dnetworkaddress.cache.negative.ttl=0
 
   profile-service:
-    build: ./profile-service
+    image: andrusha0502/profile-service:v1.2
     container_name: profile-service
     depends_on:
       postgres:
@@ -148,7 +151,7 @@ services:
       - SPRING_DATA_REDIS_HOST=redis
 
   email-service:
-    build: ./email-service
+    image: andrusha0502/email-service:v1.2
     container_name: email-service
     depends_on:
       kafka:
@@ -162,7 +165,7 @@ services:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
 
   api-gateway:
-    build: ./api-gateway
+    image: andrusha0502/api-gateway:v1.2
     container_name: api-gateway
     ports:
       - "8765:8765"
@@ -185,8 +188,8 @@ services:
     ports:
       - "5050:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com   # сменить при необходимости
-      PGADMIN_DEFAULT_PASSWORD: admin            # сменить при необходимости
+      PGADMIN_DEFAULT_EMAIL: admin@example.com  # сменить при необходимости
+      PGADMIN_DEFAULT_PASSWORD: admin           # сменить при необходимости
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     networks:
