@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface PvzMapper {
     Pvz toEntity(CreatePvzRequestDto createPvzRequestDto);
-    PvzShortDto toShotDto(Pvz pvz);
+    PvzShortDto toShortDto(Pvz pvz);
     PvzDetailsDto toDetailsDto(Pvz pvz);
 
 }

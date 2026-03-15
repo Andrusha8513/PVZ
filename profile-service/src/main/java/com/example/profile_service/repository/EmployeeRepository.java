@@ -22,4 +22,6 @@ public interface EmployeeRepository extends JpaRepository<Employee , Long> {
                                    @Param("name") String name,
                                    @Param("secondName") String secondName,
                                    @Param("surName") String surName);
+
+
 }

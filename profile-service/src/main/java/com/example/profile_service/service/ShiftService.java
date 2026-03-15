@@ -1,6 +1,9 @@
 package com.example.profile_service.service;
 
 import com.example.profile_service.dto.CreateShiftRequestDto;
+import com.example.profile_service.dto.EmployeeShiftShortDto;
+import com.example.profile_service.dto.ShiftResponseDto;
+import com.example.profile_service.dto.ShiftShortDto;
 import com.example.profile_service.entity.Employee;
 import com.example.profile_service.entity.Shift;
 import com.example.profile_service.entity.ShiftStatus;
@@ -15,6 +18,7 @@ import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -129,4 +133,28 @@ public class ShiftService {
         shiftRepository.save(shift);
     }
 
+    public ShiftResponseDto getFullShift(Long shiftId){
+      Shift shift = shiftRepository.findById(shiftId)
+              .orElseThrow(() -> new IllegalArgumentException("Смена с таким id " + shiftId + "не найдена"));
+     return shiftMapper.toFullShiftDto(shift);
+    }
+
+
+
+    public List<ShiftShortDto> getShiftsByPvz(Long pvzId) {
+        List<Shift> shifts = shiftRepository.findAllByPvzId(pvzId);
+
+        return shifts.stream()
+                .map(shiftMapper::toShortDto)
+                .toList();
+    }
+
+
+    public List<EmployeeShiftShortDto> getShiftsByEmployeeAndPvz(Long employeeId, Long pvzId) {
+        List<Shift> shifts = shiftRepository.findAllByEmployeeIdAndPvzId(employeeId, pvzId);
+
+        return shifts.stream()
+                .map(shiftMapper::toEmployeeListDto)
+                .toList();
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.profile_service.mapper;
 
 import com.example.profile_service.dto.CreateEmployeeRequestDto;
+import com.example.profile_service.dto.EmployeeShiftShortDto;
 import com.example.profile_service.dto.EmployeeShortDto;
 import com.example.profile_service.entity.Employee;
 import org.mapstruct.Mapper;

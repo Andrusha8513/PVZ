@@ -15,7 +15,10 @@ import com.example.profile_service.mapper.ImageMapper;
 import com.example.profile_service.mapper.ProfileMapper;
 import com.example.profile_service.repository.ProfileRepository;
 import com.example.profile_service.repository.PvzRepository;
+import com.example.support_module.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,9 +59,21 @@ public class ProfileService {
 
     @Transactional(readOnly = true)
     public List<PvzShortDto> getMyPvzShort(Long id){
-         List<Pvz> pvzs = pvzRepository.findByOwnerId(id);
+         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+         Long currentUserId = userDetails.getId();
+
+         boolean isAdmin = authentication.getAuthorities().stream()
+                 .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+         if (!isAdmin && !id.equals(currentUserId)){
+             throw new RuntimeException("У вас нет доступа к списку ПВЗ другого пользователя!");
+         }
+
+        List<Pvz> pvzs = pvzRepository.findByOwnerId(id);
+
             return pvzs.stream()
-                    .map(pvzMapper:: toShotDto)
+                    .map(pvzMapper:: toShortDto)
                     .toList();
         }
 
@@ -66,6 +81,15 @@ public class ProfileService {
         public PvzDetailsDto getPvzDetailsDto(Long id){
             Pvz pvz =  pvzRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Пвз с таким  id= "+ id + "не найдено"));
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            Long currentUserId = userDetails.getId();
+
+            boolean isAdmin = authentication.getAuthorities().stream()
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+            if(!isAdmin && !pvz.getOwner().getId().equals(currentUserId)){
+                throw new RuntimeException("У вас нет доступа к чужому ПВЗ!");
+            }
             return pvzMapper.toDetailsDto(pvz);
         }
 

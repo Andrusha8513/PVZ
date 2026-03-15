@@ -37,6 +37,7 @@ public class ProfileController {
     }
 
     @GetMapping("/getMyPvzShort/{id}")
+    @PreAuthorize("hasAuthority('ROLE_OWNER_PVZ') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<PvzShortDto>> getMyPvzShort(@PathVariable Long id){
         try {
             List<PvzShortDto> pvzShortDto = profileService.getMyPvzShort(id);
@@ -48,7 +49,7 @@ public class ProfileController {
     }
 
     @GetMapping("/getPvzDetailsDto/{id}")
-    @PreAuthorize("(@securityService.isOwner(#id) and hasAuthority('OWNER_PVZ')) or hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_OWNER_PVZ') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<PvzDetailsDto> getPvzDetailsDto(@PathVariable Long id){
         try {
             PvzDetailsDto dto = profileService.getPvzDetailsDto(id);

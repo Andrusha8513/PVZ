@@ -6,7 +6,7 @@ public record ProfileDashboardResponseDto(
         Long id,
         String name,
         String secondName,
-        String sueName,
+        String surName,
         List<PvzShortDto> pvzs
 ) {
 }

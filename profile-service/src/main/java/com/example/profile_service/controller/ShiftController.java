@@ -1,6 +1,10 @@
 package com.example.profile_service.controller;
 
 import com.example.profile_service.dto.CreateShiftRequestDto;
+import com.example.profile_service.dto.EmployeeShiftShortDto;
+import com.example.profile_service.dto.ShiftResponseDto;
+import com.example.profile_service.dto.ShiftShortDto;
+import com.example.profile_service.entity.Shift;
 import com.example.profile_service.entity.ShiftStatus;
 import com.example.profile_service.service.ShiftService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -126,6 +131,45 @@ public class ShiftController {
         }catch (RuntimeException e){
             log.info("Критическая ошибка " + e);
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/getFullShift/{shiftId}")
+    @PreAuthorize("hasAuthority('ROLE_OWNER_PVZ') or hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<ShiftResponseDto> getFullShift(@PathVariable Long shiftId){
+        try {
+            ShiftResponseDto responseDto = shiftService.getFullShift(shiftId);
+            return ResponseEntity.ok(responseDto);
+        }catch (RuntimeException e){
+            log.error("Ошибка при получении смены: ", e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/getShiftsByPvz/{pvzId}")
+    @PreAuthorize("hasAuthority('ROLE_OWNER_PVZ') or hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<List<ShiftShortDto>> getShiftsByPvz(@PathVariable Long pvzId) {
+        try {
+            List<ShiftShortDto> shortDtos = shiftService.getShiftsByPvz(pvzId);
+            return ResponseEntity.ok(shortDtos);
+        } catch (RuntimeException e) {
+            log.error("Ошибка при получении списка смен для ПВЗ: ", e);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/employee/{employeeId}/pvz/{pvzId}")
+    @PreAuthorize("hasAuthority('ROLE_OWNER_PVZ') or hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<List<EmployeeShiftShortDto>> getEmployeeShiftsInPvz(
+            @PathVariable Long employeeId,
+            @PathVariable Long pvzId) {
+
+        try {
+            List<EmployeeShiftShortDto> employeeShiftShortDtos = shiftService.getShiftsByEmployeeAndPvz(employeeId, pvzId);
+            return ResponseEntity.ok(employeeShiftShortDtos);
+        } catch (RuntimeException e) {
+            log.error("Ошибка при получении смен сотрудника ID " + employeeId + " для ПВЗ " + pvzId + ": ", e);
+            return ResponseEntity.badRequest().build();
         }
     }
 }

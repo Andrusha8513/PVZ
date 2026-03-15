@@ -33,14 +33,14 @@ public class EmployeeService {
         pvz.getEmployees().add(employee);
         employeeRepository.save(employee);
     }
-
+    @Transactional
     public void deleteEmployee(Long id){
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Сотрудник не найден"));
         employeeRepository.delete(employee);
     }
 
-
+    @Transactional
     public void addDescription(Long id , String description){
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Сотрудник не найден"));
@@ -48,6 +48,7 @@ public class EmployeeService {
         employeeRepository.delete(employee);
     }
 
+    @Transactional
     public void addBank(Long id , String bank){
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Сотрудник не найден"));
@@ -65,4 +66,6 @@ public class EmployeeService {
                 .toList();
         return shortDtos;
     }
+
+
 }
