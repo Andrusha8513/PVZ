@@ -2,7 +2,6 @@ package com.example.profile_service.controller;
 
 import com.example.profile_service.dto.CreateEmployeeRequestDto;
 import com.example.profile_service.dto.EmployeeShortDto;
-import com.example.profile_service.entity.Employee;
 import com.example.profile_service.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -64,6 +63,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/search/{pvzId}")
+    @PreAuthorize("hasAuthority('ROLE_OWNER_PVZ') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> searchEmployees(@PathVariable Long pvzId,
                                              @RequestParam(required = false) String name,
                                              @RequestParam(required = false) String secondName,

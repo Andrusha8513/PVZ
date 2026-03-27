@@ -62,4 +62,15 @@ public class PvzController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @DeleteMapping("/hardDeletePvz/{id}")
+    @PreAuthorize("hasAuthority('ROLE_OWNER_PVZ') or hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> hardDeletePvz(@PathVariable Long id){
+        try {
+            pvzService.hardDeletePvz(id);
+            return ResponseEntity.ok().build();
+        }catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

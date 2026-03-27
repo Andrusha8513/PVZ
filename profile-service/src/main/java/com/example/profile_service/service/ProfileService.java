@@ -23,20 +23,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProfileService {
     private final ProfileRepository profileRepository;
     private final ImageService imageService;
-    private final ImageRepository imageRepository;
-    private final ImageMapper imageMapper;
     private final ProfileMapper profileMapper;
     private final ProfileRedisRepository profileRedisRepository;
     private final PvzRepository pvzRepository;
@@ -70,10 +65,12 @@ public class ProfileService {
              throw new RuntimeException("У вас нет доступа к списку ПВЗ другого пользователя!");
          }
 
-        List<Pvz> pvzs = pvzRepository.findByOwnerId(id);
+        List<Pvz> pvzs = pvzRepository.findByOwnerId(id).stream()
+                .filter(pvz -> !Boolean.TRUE.equals(pvz.getIsDeleted()))
+                .toList();
 
             return pvzs.stream()
-                    .map(pvzMapper:: toShortDto)
+                    .map(pvzMapper::toShortDto)
                     .toList();
         }
 

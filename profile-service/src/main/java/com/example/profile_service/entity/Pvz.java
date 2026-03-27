@@ -23,6 +23,9 @@ public class Pvz {
     private String name;
     private String address;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted = false;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id" , nullable = false)

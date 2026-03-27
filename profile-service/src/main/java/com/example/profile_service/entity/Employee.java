@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,4 +32,7 @@ public class Employee {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pvz_id" )
     private Pvz pvz;
+
+    @OneToMany(cascade = CascadeType.ALL , mappedBy = "employee" , orphanRemoval = true)
+    List<Shift> shifts = new ArrayList<>();
 }

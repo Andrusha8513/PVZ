@@ -123,6 +123,7 @@ public class ShiftController {
     }
 
     @PutMapping("/updateEmployeeForShift/{shiftId}/{employeeId}")
+    @PreAuthorize("hasAuthority('ROLE_OWNER_PVZ') or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> updateEmployeeForShift(@PathVariable Long shiftId ,
                                                     @PathVariable Long employeeId){
         try {

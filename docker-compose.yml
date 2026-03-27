@@ -99,7 +99,7 @@ services:
       - backend
 
   eureka-server:
-    image: andrusha0502/eureka-server:v1.4
+    image: andrusha0502/eureka-server:v1.5
     container_name: eureka-server
     ports:
       - "8761:8761"
@@ -112,7 +112,7 @@ services:
       retries: 10
 
   user-service:
-    image: andrusha0502/user-service:v1.4
+    image: andrusha0502/user-service:v1.5
     container_name: user-service
     depends_on:
       postgres:
@@ -132,7 +132,7 @@ services:
       - JAVA_OPTS=-Dnetworkaddress.cache.ttl=0 -Dnetworkaddress.cache.negative.ttl=0
 
   profile-service:
-    image: andrusha0502/profile-service:v1.4
+    image: andrusha0502/profile-service:v1.7
     container_name: profile-service
     depends_on:
       postgres:
@@ -151,7 +151,7 @@ services:
       - SPRING_DATA_REDIS_HOST=redis
 
   email-service:
-    image: andrusha0502/email-service:v1.4
+    image: andrusha0502/email-service:v1.5
     container_name: email-service
     depends_on:
       kafka:
@@ -165,7 +165,7 @@ services:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
 
   api-gateway:
-    image: andrusha0502/api-gateway:v1.4
+    image: andrusha0502/api-gateway:v1.5
     container_name: api-gateway
     ports:
       - "8765:8765"

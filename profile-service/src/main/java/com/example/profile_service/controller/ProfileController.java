@@ -86,7 +86,7 @@ public class ProfileController {
         }
     }
 
-    @DeleteMapping("/deleteAvatar/{id}/{photoId}")
+    @DeleteMapping("/deleteAvatar/{id}")
     @PreAuthorize("@securityService.isOwner(#id) or hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<String> deleteAvatar(@PathVariable Long id) {
         try {
